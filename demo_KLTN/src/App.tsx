@@ -1,10 +1,8 @@
-import CourseCategory from "./Course/CourseCategory";
+import CourseHomePage from "./Course/CourseHomePage";
 function App() {
-
   return (
     <div className="">
-     
-      <CourseCategory/>
+      <CourseHomePage />
     </div>
   );
 }
