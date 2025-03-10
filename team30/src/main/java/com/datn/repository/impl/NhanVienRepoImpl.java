@@ -19,6 +19,12 @@ public class NhanVienRepoImpl implements NhanVienRepo {
     @Transactional
     public boolean add(NhanVien nhanVien) {
         try {
+            String generatedId = (String) entityManager.createNativeQuery(
+                    "SELECT CONCAT('NV', LPAD(IFNULL(MAX(CAST(SUBSTRING(MANHANVIEN, 3, 3) AS UNSIGNED)), 0) + 1, 3, '0')) FROM NHANVIENS"
+            ).getSingleResult();
+
+            nhanVien.setMaNhanVien(generatedId);
+
             this.entityManager.persist(nhanVien);
             return true;
         } catch (Exception e) {
