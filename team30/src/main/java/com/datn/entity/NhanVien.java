@@ -4,6 +4,7 @@ package com.datn.entity;/*
  */
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 @Table(name = "NHANVIENS")
 @Getter
 @Setter
+@Data
 public class NhanVien {
     @Id
     private String maNhanVien;
