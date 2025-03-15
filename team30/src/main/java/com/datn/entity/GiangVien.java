@@ -42,13 +42,14 @@ public class GiangVien {
     private String tinhTrangCongTac;
 
     @Lob
+    @Column(name = "GHICHU")
     private String ghiChu;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "MALINHVUC")
     private LinhVuc linhVuc;
 
-    @Column(name = "URIHINHDAIDIEN", length = 255)
+    @Column(name = "URLHINHDAIDIEN", length = 255)
     private String urlHinhDaiDien;
 
     public GiangVien() {

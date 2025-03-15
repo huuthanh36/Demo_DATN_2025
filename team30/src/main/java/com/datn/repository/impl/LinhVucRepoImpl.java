@@ -27,6 +27,13 @@ public class LinhVucRepoImpl implements LinhVucRepo {
         return typedQuery.getResultList();
     }
 
+    @Override
+    public LinhVuc findById(String maLinhVuc) {
+        LinhVuc linhVuc = this.entityManager.find(this.getEntityClass(), maLinhVuc);
+
+        return linhVuc;
+    }
+
     private Class<LinhVuc> getEntityClass() {
         return LinhVuc.class;
     }

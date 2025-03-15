@@ -14,4 +14,10 @@ public interface GiangVienRepo {
 
     void delete(String maGiangVien);
 
+    void checkSoCMNDExists(String soCMND);
+
+    void checkSoDienThoaiExists(String soDienThoai);
+
+    void checkEmailExists(String email);
+
 }

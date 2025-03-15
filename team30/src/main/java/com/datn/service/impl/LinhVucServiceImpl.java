@@ -23,4 +23,9 @@ public class LinhVucServiceImpl implements LinhVucService {
         return this.linhVucRepo.findAll();
     }
 
+    @Override
+    public LinhVuc findById(String maLinhVuc) {
+        return this.linhVucRepo.findById(maLinhVuc);
+    }
+
 }

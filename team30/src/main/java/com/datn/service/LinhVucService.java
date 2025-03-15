@@ -8,4 +8,6 @@ public interface LinhVucService {
 
     List<LinhVuc> findAll();
 
+    LinhVuc findById(String maLinhVuc);
+
 }
