@@ -27,6 +27,11 @@ public class ChucVuRepoImpl implements ChucVuRepo {
         return typedQuery.getResultList();
     }
 
+    @Override
+    public ChucVu findById(String maChucVu) {
+        return this.entityManager.find(this.getEntityClass(), maChucVu);
+    }
+
     private Class<ChucVu> getEntityClass() {
         return ChucVu.class;
     }

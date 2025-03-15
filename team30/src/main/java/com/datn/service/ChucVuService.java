@@ -8,4 +8,6 @@ public interface ChucVuService {
 
     List<ChucVu> findAll();
 
+    ChucVu findById(String maChucVu);
+
 }

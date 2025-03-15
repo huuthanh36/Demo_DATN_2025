@@ -1,6 +1,7 @@
 package com.datn.controller.admin;
 
 import com.datn.dto.request.NhanVienAddDTO;
+import com.datn.dto.request.NhanVienUpdateDTO;
 import com.datn.dto.response.ApiResponse;
 import com.datn.entity.NhanVien;
 import com.datn.service.NhanVienService;
@@ -52,6 +53,16 @@ public class NhanVienController {
         );
 
         return ResponseEntity.status(success ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @PutMapping("/update/{maNhanVien}")
+    public ResponseEntity<ApiResponse<NhanVien>> update(
+            @PathVariable String maNhanVien,
+            @Valid @RequestBody NhanVienUpdateDTO nhanvienUpdateDTO) {
+        NhanVien nhanVien = this.nhanvienService.update(maNhanVien, nhanvienUpdateDTO);
+        ApiResponse<NhanVien> response = new ApiResponse<>(HttpStatus.OK.value(), "Cập nhật thành công", nhanVien);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }

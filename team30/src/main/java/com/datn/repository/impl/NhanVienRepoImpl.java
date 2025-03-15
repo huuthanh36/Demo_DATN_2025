@@ -5,7 +5,7 @@ import com.datn.exception.nhanvien.DuplicateNhanVienException;
 import com.datn.repository.NhanVienRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import jakarta.transaction.Transactional;
+import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,7 +20,6 @@ public class NhanVienRepoImpl implements NhanVienRepo {
     }
 
     @Override
-    @Transactional
     public boolean add(NhanVien nhanVien) {
         try {
             String generatedId = (String) entityManager.createNativeQuery(
@@ -42,6 +41,22 @@ public class NhanVienRepoImpl implements NhanVienRepo {
         Query query = this.entityManager.createQuery("FROM NhanVien ");
 
         return query.getResultList();
+    }
+
+    @Override
+    public NhanVien findById(String maNhanVien) {
+        TypedQuery<NhanVien> query = this.entityManager
+                .createQuery("FROM NhanVien AS NV WHERE NV.maNhanVien = :maNhanVien", this.getEntityClass());
+
+        query.setParameter("maNhanVien", maNhanVien);
+        List<NhanVien> results = query.getResultList();
+
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    @Override
+    public NhanVien update(NhanVien nhanVien) {
+        return this.entityManager.merge(nhanVien);
     }
 
     public void checkSoCMNDExists(String soCMND) {
@@ -80,5 +95,8 @@ public class NhanVienRepoImpl implements NhanVienRepo {
         }
     }
 
+    private Class<NhanVien> getEntityClass() {
+        return NhanVien.class;
+    }
 
 }

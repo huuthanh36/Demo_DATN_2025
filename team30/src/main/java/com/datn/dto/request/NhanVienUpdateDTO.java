@@ -1,20 +1,11 @@
 package com.datn.dto.request;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
-
-public class NhanVienAddDTO {
-
-    @NotBlank(message = "Tên nhân viên không được để trống")
-    @Size(min = 5, max = 255, message = "Tên nhân viên phải có độ dài từ 5 đến 255 ký tự")
-    private String tenNhanVien;
-
-    @NotNull(message = "Ngày sinh không được để trống")
-    @Past(message = "Ngày sinh phải nhỏ hơn ngày hiện tại")
-    private LocalDate ngaySinh;
-
-    private boolean gioiTinh;
+public class NhanVienUpdateDTO {
 
     @NotBlank(message = "Số CMND không được để trống")
     @Size(min = 9, max = 9, message = "Số CMND phải có đúng 9 ký tự")
@@ -30,23 +21,19 @@ public class NhanVienAddDTO {
 
     private String diaChi;
 
-    @NotBlank(message = "Mã chức vụ không được để trống")
-    private String maChucVu; // truyền string rồi get object sau
+    private String maChucVu;
+
     private String nguoiNhapThongTin;
+
     private String ghiChu;
+
     private String uriHinhDaiDien;
 
-    public NhanVienAddDTO() {
+    public NhanVienUpdateDTO() {
 
     }
 
-    public NhanVienAddDTO(String tenNhanVien, LocalDate ngaySinh, boolean gioiTinh,
-                          String soCMND, String soDienThoai, String email, String diaChi,
-                          String maChucVu, String nguoiNhapThongTin, String ghiChu,
-                          String uriHinhDaiDien) {
-        this.tenNhanVien = tenNhanVien;
-        this.ngaySinh = ngaySinh;
-        this.gioiTinh = gioiTinh;
+    public NhanVienUpdateDTO(String soCMND, String soDienThoai, String email, String diaChi, String maChucVu, String nguoiNhapThongTin, String ghiChu, String uriHinhDaiDien) {
         this.soCMND = soCMND;
         this.soDienThoai = soDienThoai;
         this.email = email;
@@ -57,51 +44,27 @@ public class NhanVienAddDTO {
         this.uriHinhDaiDien = uriHinhDaiDien;
     }
 
-    public String getTenNhanVien() {
-        return tenNhanVien;
-    }
-
-    public void setTenNhanVien(String tenNhanVien) {
-        this.tenNhanVien = tenNhanVien;
-    }
-
-    public LocalDate getNgaySinh() {
-        return ngaySinh;
-    }
-
-    public void setNgaySinh(LocalDate ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
-
-    public boolean isGioiTinh() {
-        return gioiTinh;
-    }
-
-    public void setGioiTinh(boolean gioiTinh) {
-        this.gioiTinh = gioiTinh;
-    }
-
-    public String getSoCMND() {
+    public @NotBlank(message = "Số CMND không được để trống") @Size(min = 9, max = 9, message = "Số CMND phải có đúng 9 ký tự") String getSoCMND() {
         return soCMND;
     }
 
-    public void setSoCMND(String soCMND) {
+    public void setSoCMND(@NotBlank(message = "Số CMND không được để trống") @Size(min = 9, max = 9, message = "Số CMND phải có đúng 9 ký tự") String soCMND) {
         this.soCMND = soCMND;
     }
 
-    public String getSoDienThoai() {
+    public @NotBlank(message = "Số điện thoại không được để trống") @Pattern(regexp = "\\d{10}", message = "Số điện thoại phải có đúng 10 chữ số") String getSoDienThoai() {
         return soDienThoai;
     }
 
-    public void setSoDienThoai(String soDienThoai) {
+    public void setSoDienThoai(@NotBlank(message = "Số điện thoại không được để trống") @Pattern(regexp = "\\d{10}", message = "Số điện thoại phải có đúng 10 chữ số") String soDienThoai) {
         this.soDienThoai = soDienThoai;
     }
 
-    public String getEmail() {
+    public @NotBlank(message = "Email không được để trống") @Email(message = "Email không đúng định dạng") String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(@NotBlank(message = "Email không được để trống") @Email(message = "Email không đúng định dạng") String email) {
         this.email = email;
     }
 

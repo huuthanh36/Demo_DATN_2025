@@ -8,4 +8,6 @@ public interface ChucVuRepo {
 
     List<ChucVu> findAll();
 
+    ChucVu findById(String maChucVu);
+
 }
