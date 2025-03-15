@@ -4,8 +4,11 @@ import com.datn.entity.NhanVien;
 import com.datn.exception.nhanvien.DuplicateNhanVienException;
 import com.datn.repository.NhanVienRepo;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class NhanVienRepoImpl implements NhanVienRepo {
@@ -32,6 +35,13 @@ public class NhanVienRepoImpl implements NhanVienRepo {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<NhanVien> findAll() {
+        Query query = this.entityManager.createQuery("FROM NhanVien ");
+
+        return query.getResultList();
     }
 
     public void checkSoCMNDExists(String soCMND) {

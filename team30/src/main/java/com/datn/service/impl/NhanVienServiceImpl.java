@@ -7,10 +7,13 @@ import com.datn.service.NhanVienService;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NhanVienServiceImpl implements NhanVienService {
 
     private final NhanVienRepo nhanvienRepo;
+
     private final EntityManager entityManager;
 
     public NhanVienServiceImpl(NhanVienRepo nhanvienRepo, EntityManager entityManager) {
@@ -31,5 +34,10 @@ public class NhanVienServiceImpl implements NhanVienService {
         nhanVien.setChucVu(chucVu);
 
         return nhanvienRepo.add(nhanVien);
+    }
+
+    @Override
+    public List<NhanVien> findAll() {
+        return this.nhanvienRepo.findAll();
     }
 }
