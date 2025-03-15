@@ -4,8 +4,6 @@ import com.datn.entity.NhanVien;
 import com.datn.exception.nhanvien.DuplicateNhanVienException;
 import com.datn.repository.NhanVienRepo;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Repository;
 
