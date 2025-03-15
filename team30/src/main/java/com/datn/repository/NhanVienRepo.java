@@ -15,6 +15,8 @@ public interface NhanVienRepo {
 
     NhanVien update(NhanVien nhanVien);
 
+    void delete(String maNhanVien);
+
     void checkSoCMNDExists(String soCMND);
 
     void checkSoDienThoaiExists(String soDienThoai);

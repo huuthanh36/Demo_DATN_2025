@@ -65,4 +65,12 @@ public class NhanVienController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @DeleteMapping("/delete/{maNhanVien}")
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable String maNhanVien) {
+        this.nhanvienService.delete(maNhanVien);
+        ApiResponse<Void> response = new ApiResponse<>(HttpStatus.OK.value(), "Xóa nhân viên thành công", null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
 }

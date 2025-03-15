@@ -75,6 +75,12 @@ public class NhanVienServiceImpl implements NhanVienService {
         return this.nhanvienRepo.findAll();
     }
 
+    @Override
+    @Transactional
+    public void delete(String maNhanVien) {
+        this.nhanvienRepo.delete(maNhanVien);
+    }
+
     private void checkChucVuExists(String maChucVu) {
         ChucVu chucVu = this.chucVuRepo.findById(maChucVu);
         if(chucVu == null) {

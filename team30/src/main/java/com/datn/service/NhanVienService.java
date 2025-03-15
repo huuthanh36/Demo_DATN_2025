@@ -11,6 +11,8 @@ public interface NhanVienService {
 
     NhanVien update(String maNhanVien, NhanVienUpdateDTO nhanVienUpdateDTO);
 
+    void delete(String maNhanVien);
+
     List<NhanVien> findAll();
 
 }

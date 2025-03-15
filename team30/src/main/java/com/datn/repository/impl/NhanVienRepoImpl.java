@@ -2,6 +2,7 @@ package com.datn.repository.impl;
 
 import com.datn.entity.NhanVien;
 import com.datn.exception.nhanvien.DuplicateNhanVienException;
+import com.datn.exception.nhanvien.NhanVienNotFoundException;
 import com.datn.repository.NhanVienRepo;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
@@ -57,6 +58,20 @@ public class NhanVienRepoImpl implements NhanVienRepo {
     @Override
     public NhanVien update(NhanVien nhanVien) {
         return this.entityManager.merge(nhanVien);
+    }
+
+    @Override
+    public void delete(String maNhanVien) {
+        NhanVien nhanVien = this.entityManager.find(this.getEntityClass(), maNhanVien);
+        if (nhanVien == null) {
+            throw new NhanVienNotFoundException("Không tìm thấy nhân viên với mã: " + maNhanVien);
+        }
+
+        // xóa liên kết
+        nhanVien.setChucVu(null);
+        this.entityManager.merge(nhanVien);
+
+        this.entityManager.remove(nhanVien);
     }
 
     public void checkSoCMNDExists(String soCMND) {
