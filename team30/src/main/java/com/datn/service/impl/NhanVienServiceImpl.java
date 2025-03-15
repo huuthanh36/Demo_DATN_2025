@@ -20,18 +20,16 @@ public class NhanVienServiceImpl implements NhanVienService {
 
     @Override
     public boolean add(NhanVien nhanVien, String maChucVu) {
-        try {
-            ChucVu chucVu = entityManager.find(ChucVu.class, maChucVu);
-            if (chucVu == null) {
-                return false;
-            }
-
-            nhanVien.setChucVu(chucVu);
-
-            return nhanvienRepo.add(nhanVien);
-        } catch (Exception e) {
-            e.printStackTrace();
+        ChucVu chucVu = entityManager.find(ChucVu.class, maChucVu);
+        if (chucVu == null) {
             return false;
         }
+        this.nhanvienRepo.checkSoCMNDExists(nhanVien.getSoCMND());
+        this.nhanvienRepo.checkSoDienThoaiExists(nhanVien.getSoDienThoai());
+        this.nhanvienRepo.checkEmailExists(nhanVien.getEmail());
+
+        nhanVien.setChucVu(chucVu);
+
+        return nhanvienRepo.add(nhanVien);
     }
 }

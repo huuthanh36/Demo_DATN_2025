@@ -1,8 +1,10 @@
 package com.datn.controller.admin;
 
-import com.datn.dto.NhanVienAddDTO;
+import com.datn.dto.request.NhanVienAddDTO;
+import com.datn.dto.response.ApiResponse;
 import com.datn.entity.NhanVien;
 import com.datn.service.NhanVienService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +23,7 @@ public class NhanVienController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> add(@RequestBody NhanVienAddDTO nhanvienAddDTO) {
+    public ResponseEntity<ApiResponse<String>> add(@Valid @RequestBody NhanVienAddDTO nhanvienAddDTO) {
         NhanVien nhanVien = new NhanVien();
         nhanVien.setTenNhanVien(nhanvienAddDTO.getTenNhanVien());
         nhanVien.setNgaySinh(nhanvienAddDTO.getNgaySinh());
@@ -36,9 +38,13 @@ public class NhanVienController {
 
         boolean success = nhanvienService.add(nhanVien, nhanvienAddDTO.getMaChucVu());
 
-        return success
-                ? ResponseEntity.ok("Thêm nhân viên thành công")
-                : ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Thêm nhân viên thất bại");
+        ApiResponse<String> response = new ApiResponse<>(
+                success ? HttpStatus.CREATED.value() : HttpStatus.BAD_REQUEST.value(),
+                success ? "Thêm nhân viên thành công" : "Thêm nhân viên thất bại",
+                null
+        );
+
+        return ResponseEntity.status(success ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(response);
     }
 
 }

@@ -1,16 +1,35 @@
-package com.datn.dto;
+package com.datn.dto.request;
+
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 
 public class NhanVienAddDTO {
 
+    @NotBlank(message = "Tên nhân viên không được để trống")
+    @Size(min = 5, max = 255, message = "Tên nhân viên phải có độ dài từ 5 đến 255 ký tự")
     private String tenNhanVien;
+
+    @NotNull(message = "Ngày sinh không được để trống")
+    @Past(message = "Ngày sinh phải nhỏ hơn ngày hiện tại")
     private LocalDate ngaySinh;
+
     private boolean gioiTinh;
+
+    @NotBlank(message = "Số CMND không được để trống")
+    @Size(min = 10, max = 10, message = "Số CMND phải có đúng 10 ký tự")
     private String soCMND;
+
+    @NotBlank(message = "Số điện thoại không được để trống")
+    @Pattern(regexp = "\\d{10}", message = "Số điện thoại phải có đúng 10 chữ số")
     private String soDienThoai;
+
+    @NotBlank(message = "Email không được để trống")
+    @Email(message = "Email không đúng định dạng")
     private String email;
     private String diaChi;
+
+    @NotBlank(message = "Mã chức vụ không được để trống")
     private String maChucVu; // truyền string rồi get object sau
     private String nguoiNhapThongTin;
     private String ghiChu;
