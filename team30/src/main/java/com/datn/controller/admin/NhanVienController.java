@@ -30,6 +30,17 @@ public class NhanVienController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/pagination")
+    public ResponseEntity<ApiResponse<List<NhanVien>>> pagination(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<NhanVien> nhanViens = this.nhanvienService.findAll(page, size);
+        String message = "Danh sách các nhân viên ở trang " + page;
+        ApiResponse<List<NhanVien>> response = new ApiResponse<>(HttpStatus.OK.value(), "Danh sách các nhân viên", nhanViens);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> add(@Valid @RequestBody NhanVienAddDTO nhanvienAddDTO) {
         NhanVien nhanVien = new NhanVien();

@@ -11,6 +11,8 @@ public interface NhanVienRepo {
 
     List<NhanVien> findAll();
 
+    List<NhanVien> findAll(int pageNumber, int pageSize);
+
     NhanVien findById(String maNhanVien);
 
     NhanVien update(NhanVien nhanVien);

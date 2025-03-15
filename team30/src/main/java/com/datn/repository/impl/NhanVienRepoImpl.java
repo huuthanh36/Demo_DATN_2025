@@ -45,6 +45,16 @@ public class NhanVienRepoImpl implements NhanVienRepo {
     }
 
     @Override
+    public List<NhanVien> findAll(int pageNumber, int pageSize) {
+        Query query = this.entityManager.createQuery("FROM NhanVien");
+
+        query.setFirstResult((pageNumber - 1) * pageSize);
+        query.setMaxResults(pageSize);
+
+        return query.getResultList();
+    }
+
+    @Override
     public NhanVien findById(String maNhanVien) {
         TypedQuery<NhanVien> query = this.entityManager
                 .createQuery("FROM NhanVien AS NV WHERE NV.maNhanVien = :maNhanVien", this.getEntityClass());

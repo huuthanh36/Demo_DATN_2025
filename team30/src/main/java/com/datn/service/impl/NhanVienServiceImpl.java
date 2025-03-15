@@ -8,7 +8,6 @@ import com.datn.exception.nhanvien.NhanVienNotFoundException;
 import com.datn.repository.ChucVuRepo;
 import com.datn.repository.NhanVienRepo;
 import com.datn.service.NhanVienService;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -73,6 +72,11 @@ public class NhanVienServiceImpl implements NhanVienService {
     @Override
     public List<NhanVien> findAll() {
         return this.nhanvienRepo.findAll();
+    }
+
+    @Override
+    public List<NhanVien> findAll(int pageNumber, int pageSize) {
+        return this.nhanvienRepo.findAll(pageNumber, pageSize);
     }
 
     @Override
