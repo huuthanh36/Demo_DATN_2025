@@ -38,7 +38,7 @@ public class NhanVien {
     @Column(name = "DIACHI")
     private String diaChi;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "MACHUCVU")
     private ChucVu chucVu;
 
