@@ -5,11 +5,16 @@ import com.datn.dto.request.NhanVienUpdateDTO;
 import com.datn.dto.response.ApiResponse;
 import com.datn.entity.NhanVien;
 import com.datn.service.NhanVienService;
+import com.datn.utils.ExcelExportService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @RestController
@@ -17,9 +22,12 @@ import java.util.List;
 public class NhanVienController {
 
     private final NhanVienService nhanvienService;
+    private final ExcelExportService excelExportService;
 
-    public NhanVienController(NhanVienService nhanvienService) {
+    @Autowired
+    public NhanVienController(NhanVienService nhanvienService, ExcelExportService excelExportService) {
         this.nhanvienService = nhanvienService;
+        this.excelExportService = excelExportService;
     }
 
     @GetMapping("/nhanviens")
@@ -49,6 +57,21 @@ public class NhanVienController {
         ApiResponse<List<NhanVien>> response = new ApiResponse<>(HttpStatus.OK.value(), "Danh sách các nhân viên", nhanViens);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/export")
+    public ResponseEntity<byte[]> export() {
+        List<NhanVien> nhanViens = this.nhanvienService.findAll();
+        ByteArrayInputStream in = excelExportService.exportNhanViensToExcel(nhanViens);
+
+        byte[] bytes = in.readAllBytes();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=nhanviens.xlsx");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(bytes);
     }
 
     @PostMapping("/add")
