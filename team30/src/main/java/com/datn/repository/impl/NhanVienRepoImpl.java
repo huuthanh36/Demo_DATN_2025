@@ -55,6 +55,14 @@ public class NhanVienRepoImpl implements NhanVienRepo {
     }
 
     @Override
+    public List<NhanVien> findByTenNhanVien(String tenNhanVien) {
+        TypedQuery<NhanVien> typedQuery = this.entityManager
+                .createQuery("FROM NhanVien AS NV WHERE NV.tenNhanVien LIKE :tenNhanVien", this.getEntityClass());
+
+        return typedQuery.setParameter("tenNhanVien", "%" + tenNhanVien + "%").getResultList();
+    }
+
+    @Override
     public NhanVien findById(String maNhanVien) {
         TypedQuery<NhanVien> query = this.entityManager
                 .createQuery("FROM NhanVien AS NV WHERE NV.maNhanVien = :maNhanVien", this.getEntityClass());

@@ -17,4 +17,6 @@ public interface NhanVienService {
 
     List<NhanVien> findAll(int pageNumber, int pageSize);
 
+    List<NhanVien> findByTenNhanVien(String tenNhanVien);
+
 }

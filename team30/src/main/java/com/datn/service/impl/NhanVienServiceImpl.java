@@ -80,6 +80,11 @@ public class NhanVienServiceImpl implements NhanVienService {
     }
 
     @Override
+    public List<NhanVien> findByTenNhanVien(String tenNhanVien) {
+        return this.nhanvienRepo.findByTenNhanVien(tenNhanVien);
+    }
+
+    @Override
     @Transactional
     public void delete(String maNhanVien) {
         this.nhanvienRepo.delete(maNhanVien);

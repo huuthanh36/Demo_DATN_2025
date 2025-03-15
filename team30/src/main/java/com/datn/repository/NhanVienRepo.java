@@ -15,6 +15,8 @@ public interface NhanVienRepo {
 
     NhanVien findById(String maNhanVien);
 
+    List<NhanVien> findByTenNhanVien(String tenNhanVien);
+
     NhanVien update(NhanVien nhanVien);
 
     void delete(String maNhanVien);

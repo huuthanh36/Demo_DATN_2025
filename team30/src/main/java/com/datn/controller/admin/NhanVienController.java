@@ -41,6 +41,16 @@ public class NhanVienController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<NhanVien>>> search(
+            @RequestParam String tenNhanVien
+    ) {
+        List<NhanVien> nhanViens = this.nhanvienService.findByTenNhanVien(tenNhanVien);
+        ApiResponse<List<NhanVien>> response = new ApiResponse<>(HttpStatus.OK.value(), "Danh sách các nhân viên", nhanViens);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<ApiResponse<String>> add(@Valid @RequestBody NhanVienAddDTO nhanvienAddDTO) {
         NhanVien nhanVien = new NhanVien();
