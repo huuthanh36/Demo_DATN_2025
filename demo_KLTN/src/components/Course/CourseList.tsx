@@ -1,20 +1,22 @@
 import {
-  useState,
   MouseEvent,
-  useRef,
-  useEffect,
   useCallback,
+  useEffect,
   useMemo,
+  useRef,
+  useState,
 } from "react";
 
-export default function CourseCategory() {
+export default function CourseList() {
   const [search, setSearch] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenShare, setIsOpenShare] = useState(false);
+  const [isOpenType, setIsOpenType] = useState(false);
 
   const menuRef = useRef<HTMLDivElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
+  const typeRef = useRef<HTMLDivElement | null>(null);
 
   const handleViewClick = (e: MouseEvent) => {
     e.stopPropagation();
@@ -22,29 +24,15 @@ export default function CourseCategory() {
   };
   const toggleMenu = useCallback(() => setIsOpenMenu((prev) => !prev), []);
   const toggleShare = useCallback(() => setIsOpenShare((prev) => !prev), []);
-
+  const toggleType = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation(); // Ngăn chặn sự kiện click lan truyền
+    setIsOpenType((prev) => !prev);
+  }, []);
   const handleCloseSidebar = (e: MouseEvent<HTMLDivElement>) => {
     if (!menuRef.current?.contains(e.target as Node) && isSidebarOpen) {
       setIsSidebarOpen(false);
     }
   };
-
-  // useEffect(() => {
-  //   const handleClickOutside = (event: Event) => {
-  //     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-  //       setIsOpenMenu(false);
-  //     }
-  //     if (
-  //       shareRef.current &&
-  //       !shareRef.current.contains(event.target as Node)
-  //     ) {
-  //       setIsOpenShare(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("click", handleClickOutside);
-  //   return () => document.removeEventListener("click", handleClickOutside);
-  // }, []);
 
   const handleClickOutside = useCallback(
     (event: Event) => {
@@ -62,8 +50,21 @@ export default function CourseCategory() {
       ) {
         setIsOpenShare(false);
       }
+      if (
+        typeRef.current &&
+        !typeRef.current.contains(event.target as Node) &&
+        isOpenType
+      ) {
+        if (
+          event.target instanceof HTMLElement &&
+          typeRef.current.contains(event.target)
+        ) {
+          return;
+        }
+        setIsOpenType(false);
+      }
     },
-    [isOpenMenu, isOpenShare]
+    [isOpenMenu, isOpenShare, isOpenType]
   );
 
   useEffect(() => {
@@ -71,51 +72,54 @@ export default function CourseCategory() {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [handleClickOutside]);
 
-  const categories = useMemo(
+  const courseList = useMemo(
     () => [
       {
         id: 1,
-        name: "DANH MỤC 1",
-        description: "Tristique libero...",
+        name: "HỌC CÙNG HANTA 1",
+        category: "Tristique libero...",
         courses: 3,
-        share: "Toàn hệ thống",
+        fee: "230.000",
       },
       {
         id: 2,
-        name: "DANH MỤC 2",
-        description: "Elementum justo...",
+        name: "HỌC CÙNG HANTA 2",
+        category: "Elementum justo...",
         courses: 5,
-        share: "DS Tài khoản",
+        fee: "100000",
       },
       {
         id: 3,
-        name: "DANH MỤC 3",
-        description: "Vitae sit tempor...",
+        name: "HỌC CÙNG HANTA 3",
+        category: "Vitae sit tempor...",
         courses: 10,
-        share: "Không chia sẻ",
+        fee: "150000",
       },
     ],
     []
   );
-  // Button xem
-  const [selectedShare, setSelectedShare] = useState("Toàn hệ thống");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const users = [
-    { name: "Thông Nguyễn", email: "royal74110@gmail.com" },
-    { name: "Nguyễn Thành Thông", email: "nguyenthanhthongy@gmail.com" },
-    { name: "Khôi Nguyễn", email: "khoiproxyz@gmail.com" },
-  ];
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const courseType = useMemo(
+    () => [
+      {
+        id: 1,
+        name: "Fullstack",
+      },
+      {
+        id: 2,
+        name: "Font-end",
+      },
+      {
+        id: 3,
+        name: "Back-end",
+      },
+      {
+        id: 4,
+        name: "Tester",
+      },
+    ],
+    []
   );
-
-  const toggleUser = (email: string) => {
-    setSelectedUsers((prev) =>
-      prev.includes(email) ? prev.filter((u) => u !== email) : [...prev, email]
-    );
-  };
 
   return (
     <div onClick={handleCloseSidebar} className="h-full">
@@ -150,17 +154,14 @@ export default function CourseCategory() {
             {isOpenMenu && (
               <div className="absolute left-0 w-full mt-1 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg transition duration-300">
                 <div className="py-1">
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Option 1
-                  </button>
-
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Option 2
-                  </button>
-
-                  <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Option 3
-                  </button>
+                  {courseList.map((courseList) => (
+                    <button
+                      key={courseList.id}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      {courseList.name}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
@@ -218,33 +219,33 @@ export default function CourseCategory() {
         <table className="w-full border-collapse border rounded-md ">
           <thead>
             <tr className="bg-gray-200">
-              <th className="p-2 border">STT</th>
+              <th className="p-2 border">#</th>
               <th>IMG</th>
-              <th className="p-2 border">TÊN DANH MỤC</th>
-              <th className="p-2 border">MÔ TẢ</th>
-              <th className="p-2 border">SỐ KHOÁ HỌC</th>
-              <th className="p-2 border">CHIA SẺ</th>
+              <th className="p-2 border">TÊN KHOÁ HỌC</th>
+              <th className="p-2 border">THUỘC DANH MỤC</th>
+              <th className="p-2 border">CHỦ ĐỀ / BÀI RÈN LUYỆN</th>
+              <th className="p-2 border">LỚP THAM GIA</th>
               <th className="p-2 border">HOẠT ĐỘNG</th>
             </tr>
           </thead>
           <tbody>
-            {categories
+            {courseList
               .filter((c) =>
                 c.name.toLowerCase().includes(search.toLowerCase())
               )
-              .map((category, index) => (
-                <tr key={category.id} className="border-b">
+              .map((courseList, index) => (
+                <tr key={courseList.id} className="border-b">
                   <td className="p-2 text-center">{index + 1}</td>
                   <img
-                    className=" w-16 h-16 p-2"
+                    className=" w-12 h-12 p-1 text-center"
                     src="https://www.svgrepo.com/show/476364/number-one.svg"
                     alt="--------"
                   />
-                  <td className="p-2">{category.name}</td>
+                  <td className="p-2 text-center">{courseList.name}</td>
 
-                  <td className="p-2">{category.description}</td>
-                  <td className="p-2 text-center">{category.courses}</td>
-                  <td className="p-2">{category.share}</td>
+                  <td className="p-2">{courseList.category}</td>
+                  <td className="p-2 text-center">{courseList.courses}</td>
+                  <td className="p-2 text-center">{courseList.fee}</td>
                   <td className="p-2 text-center">
                     <button
                       onClick={handleViewClick}
@@ -314,154 +315,180 @@ export default function CourseCategory() {
           </tbody>
         </table>
       </div>
-      {/* Sidebar */}
+      {/* Sidebar Button*/}
       <div
-        className={`absolute bg-white w-1/3 min-h-screen overflow-y-auto transition-transform transform ease-in-out duration-300 top-0 right-0 ${
+        className={`absolute bg-white w-1/2 min-h-screen overflow-y-auto transition-transform transform ease-in-out duration-300 top-0 right-0 ${
           isSidebarOpen ? "translate-x-0" : "translate-x-full"
         }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-auto mx-auto bg-white p-6 rounded-lg shadow-md relative">
-          <div>
-            <h2 className="text-xl font-bold">Thêm danh mục Khóa học</h2>
-            <button
-              className="absolute top-4 right-4"
-              onClick={handleViewClick}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                className="size-6 border m-2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="flex my-2">
+        <div className="w-full mx-auto  p-8 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4 text-left">Thêm khóa học</h2>
+          <div className="">
             <img
               src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt="Book"
-              className="size-28"
+              className="size-28 "
             />
-            <div className="items-center justify-center ml-4">
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  id="category"
-                  className="peer w-full border p-2 pt-4 rounded-md focus:outline-blue-300"
-                  placeholder=""
-                />
-                <label
-                  htmlFor="category"
-                  className="absolute left-2 top-2 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-0 peer-focus:text-sm peer-focus:text-black"
-                >
-                  Tên danh mục
-                </label>
-              </div>
-
-              <div className="relative w-full mt-4">
-                <input
-                  type="text"
-                  id="description"
-                  className="peer w-full border p-2 pt-5 rounded-md focus:outline-blue-500"
-                  placeholder=""
-                />
-                <label
-                  htmlFor="description"
-                  className="absolute left-2 top-2 text-gray-500 text-sm transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-2 peer-focus:text-sm peer-focus:text-blue-500"
-                >
-                  Nhập mô tả
-                </label>
-              </div>
-            </div>
           </div>
-
-          <div className="mt-4">
-            <label className="block text-lg font-medium">Chia sẻ</label>
-            <div className="flex gap-4 mt-1">
-              {["Toàn hệ thống", "Tài khoản", "Không chia sẻ"].map((option) => (
-                <label key={option} className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    name="share"
-                    value={option}
-                    checked={selectedShare === option}
-                    onChange={() => setSelectedShare(option)}
-                  />
-                  {option}
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {selectedShare === "Tài khoản" && (
-            <div className="mt-4">
-              <div className="relative">
-                <search className="absolute left-2 top-2 text-gray-400" />
-                <input
-                  type="text"
-                  className="w-full border p-2 pl-8 rounded"
-                  placeholder="Nhập tài khoản"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
-              <ul className="border rounded mt-2 max-h-32 overflow-y-auto">
-                {filteredUsers.map((user) => (
-                  <li
-                    key={user.email}
-                    className="p-2 flex justify-between hover:bg-gray-100 cursor-pointer"
-                    onClick={() => toggleUser(user.email)}
+          {/* Button active  */}
+          <form className="mt-4">
+            <div className="flex gap-4">
+              <div className="mb-4 w-1/3">
+                <div className=" relative" ref={typeRef}>
+                  <button
+                    onClick={toggleType}
+                    className="inline text-gray-700 text-sm font-bold mb-2 border rounded-lg items-center px-4 py-2 text-md   bg-white hover:bg-gray-200 focus:outline-none "
                   >
-                    <span>{user.name}</span>
-                    <span className="text-gray-500 text-sm">{user.email}</span>
-                  </li>
-                ))}
-              </ul>
+                    Thể loại
+                    <svg
+                      className="w-4 h-4 ml-12 -mr-1 inline"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path fillRule="evenodd" d="M10 12l-5-5h10l-5 5z" />
+                    </svg>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {isOpenType && (
+                    <div className="absolute left-0 w-full mt-1 origin-top-left bg-white divide-y divide-gray-100 rounded-md shadow-lg transition duration-300">
+                      <div className="py-1">
+                        {courseType.map((courseType) => (
+                          <button
+                            key={courseType.id}
+                            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100  mt-1  bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                          >
+                            {courseType.name}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="mb-4 w-full">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="courseName"
+                >
+                  Tên khóa học
+                </label>
+                <input
+                  type="text"
+                  id="courseName"
+                  placeholder="Khóa học Toán tư duy tiểu học"
+                  className="form-input mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
             </div>
-          )}
+            <div className="flex gap-4">
+              <div className="mb-4 w-1/3">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="courseID"
+                >
+                  Mã khoá học
+                </label>
+                <input className="form-select mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></input>
+              </div>
+              <div className="mb-4 w-full">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="landingPage"
+                >
+                  Link landing page (Nếu có)
+                </label>
+                <input
+                  type="url"
+                  id="landingPage"
+                  placeholder="Link landing page"
+                  className="form-input mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            </div>
+            <div className="flex gap-4">
+              <div className="mb-4 w-1/3">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="startDate"
+                >
+                  Ngày bắt đầu
+                </label>
+                <input
+                  type="date"
+                  id="startDate"
+                  className="form-input mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-          <div className="mt-4">
-            <table className="w-full border rounded">
-              <thead>
-                <tr className="bg-gray-200 text-left">
-                  <th className="p-2">Email</th>
-                  <th className="p-2">Họ tên</th>
-                  <th className="p-2">Hoạt động</th>
-                  <th className="p-2">Quyền chỉnh sửa</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedUsers.map((email) => (
-                  <tr key={email} className="border-b">
-                    <td className="p-2">{email}</td>
-                    <td className="p-2">
-                      {users.find((u) => u.email === email)?.name}
-                    </td>
-                    <td className="p-2 text-center">
-                      <button className="text-blue-500">✏️</button>
-                    </td>
-                    <td className="p-2 text-center">
-                      <input type="checkbox" />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              <div className="mb-4 w-full">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="classSchedule"
+                >
+                  Lớp tham gia
+                </label>
+                <select
+                  id="classSchedule"
+                  className="form-input mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">-- Chọn loại --</option>
+                  <option value="laptrinh">Lớp lập trình</option>
+                  <option value="phanmem">Lớp phần mềm</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex gap-4 ">
+              <div className="mb-4 w-1/3">
+                <label
+                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="teacherSchedule"
+                >
+                  Học viên giáo viên
+                </label>
+                <input
+                  id="teacherSchedule"
+                  className="form-select mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                ></input>
+              </div>
 
-          <div className="mt-6 text-center">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white py-2 px-6 rounded-md">
+              <div className="mt-4 w-full ">
+                <label className="inline-flex items-center ">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox text-blue-500 size-5"
+                  />
+                  <span className="ml-2 text-gray-700 text-md">
+                    Thuộc danh mục Toán tư duy
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div className="mb-4">
+              <label
+                className="block text-gray-700 text-sm font-bold mb-2"
+                htmlFor="webContent"
+              >
+                Nội dung hiển thị trên Web Bikids
+              </label>
+              <textarea
+                id="webContent"
+                placeholder="Nội dung của khóa học..."
+                className="form-textarea mt-1 block w-full bg-gray-200 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-2 px-4 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
               Thêm
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
