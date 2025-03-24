@@ -1,13 +1,21 @@
-import CourseHomePage from "./components/Course/CourseHomePage";
+//import CourseHomePage from "./components/Course/CourseHomePage";
 // import Home from "./HomePage/Home";
+
+import Hero from "./components/Hero/Hero";
+
 // import HomePageUser from "./HomePage/HomePageUsers";
 function App() {
   return (
-    <div className="">
-      <CourseHomePage />
-      {/* <HomePageUser /> */}
-      {/* <Home /> */}
-    </div>
+    <main className="overflow-x-hidden bg-white text-dark">
+      <Hero />
+    </main>
+
+    // <div className="">
+    //   {/* <CourseHomePage /> */}
+    //   {/* <HomePageUser /> */}
+    //   {/* <Home /> */}
+    //   <Navbar />
+    // </div>
   );
 }
 
